@@ -11,22 +11,20 @@ contract Waybill{
     }
 
     // 二、货物信息
-    // 编号、唛头、集装箱箱号、集装箱箱型、集装箱箱类、施封号码、品名、品类、HS编码、产地、重量
+    // HS编码、品名、产地、重量、品类、集装箱箱号、集装箱箱型、集装箱箱类、施封号码等
     // 以太坊虚拟机输入+输出参数总数上限是16个，因此必须拆分成两部分输入
     struct Cargo1{
-        string cargoNumber;//编号 
-        string shippingMark;//唛头  
+        string HSCode;//海关HS编码（商品名称及编码协调制度的国际公约）
+        string cargoName;//品名 
+        string origin;//产地
+        string weight;//重量
+        string category;//品类 
+    }
+    struct Cargo2{
         string containerNumber;//集装箱箱号 
         string containerType;//集装箱箱型
         string containerClass;//集装箱箱类 
         string sealNumber;//施封号码 
-    }
-    struct Cargo2{
-        string cargoName;//品名 
-        string category;//品类 
-        string HSCode;//海关HS编码（商品名称及编码协调制度的国际公约）
-        string origin;//产地
-        string weight;//重量
     }
 
     // 三、运输信息
@@ -108,17 +106,17 @@ contract Waybill{
     }
 
     // 货物信息录入(1/2)
-    function initCargo1(string memory _cargoNumber, string memory _shippingMark, string memory _containerNumber, string memory _containerType, 
-    string memory _containerClass, string memory _sealNumber) pure public 
-    returns(string memory, string memory, string memory, string memory, string memory, string memory){
-        Cargo1 memory cargoTest = Cargo1(_cargoNumber, _shippingMark, _containerNumber, _containerType, _containerClass, _sealNumber);
-        return(cargoTest.cargoNumber, cargoTest.shippingMark, cargoTest.containerNumber, cargoTest.containerType, cargoTest.containerClass, cargoTest.sealNumber);
+    function initCargo1(string memory _HSCode, string memory _cargoName, string memory _origin, 
+    string memory _weight, string memory _category) pure public 
+    returns(string memory, string memory, string memory, string memory, string memory){
+        Cargo1 memory cargoTest = Cargo1(_HSCode, _cargoName, _origin, _weight, _category);
+        return(cargoTest.HSCode, cargoTest.cargoName, cargoTest.origin, cargoTest.weight, cargoTest.category);
     }
-    // 货物信息录入(2/2)
-    function initCargo2(string memory _cargoName, string memory _category, string memory _HSCode, string memory _origin, string memory _weight)
-     pure public returns(string memory, string memory, string memory, string memory, string memory){
-        Cargo2 memory cargoTest = Cargo2(_cargoName, _category, _HSCode, _origin, _weight);
-        return(cargoTest.cargoName, cargoTest.category, cargoTest.HSCode, cargoTest.origin, cargoTest.weight);
+    // 货物信息录入(2/2) containerNUmber containerType containerClass sealNumber
+    function initCargo2(string memory _containerNUmber, string memory _containerType, string memory _containerClass, string memory _sealNumber)
+     pure public returns(string memory, string memory, string memory, string memory){
+        Cargo2 memory cargoTest = Cargo2(_containerNUmber, _containerType, _containerClass, _sealNumber);
+        return(cargoTest.containerNUmber, cargoTest.containerType, cargoTest.containerClass, cargoTest.sealNumber);
     }
 
     // 多式联运经营人信息录入
